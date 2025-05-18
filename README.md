@@ -26,3 +26,64 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 -   **Backend:** Python com Flask
 -   **Inteligência Artificial:** [Mencionar qual API/Modelo de IA do Google foi usado - Gemini?]
 
+É recomendado usar um ambiente virtual Python (como `venv` ou `conda`) para isolar as dependências do projeto.
+
+### Configuração
+
+1.  Clone o repositório para a sua máquina:
+    ```bash
+    git clone [https://www.google.com/search?q=https://github.com/esa1715/fixa-ai-dev.git](https://www.google.com/search?q=https://github.com/esa1715/fixa-ai-dev.git)
+    ```
+
+2.  Navegue até a pasta raiz do projeto clonado:
+    ```bash
+    cd fixa-ai-dev
+    ```
+
+3.  Instale as dependências necessárias listadas no `requirements.txt`. Certifique-se de que você tem o arquivo `requirements.txt` na pasta raiz do projeto (ele deve ter vindo com o clone).
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  Configure sua Chave de API do Google Gemini.
+    * Crie um arquivo na pasta raiz do projeto (`fixa-ai-dev`) chamado `.env`.
+    * Abra este arquivo `.env` em um editor de texto.
+    * Adicione a seguinte linha, substituindo `SUA_CHAVE_AQUI` pela sua chave de API real obtida do Google AI Studio:
+        ```plaintext
+        GOOGLE_API_KEY=SUA_CHAVE_AQUI
+        ```
+    * Salve e feche o arquivo `.env`.
+    * **Importante:** Não compartilhe seu arquivo `.env` ou sua chave de API!
+
+## Como Usar
+
+Após seguir os passos de instalação e configuração, você pode iniciar o servidor Flask para rodar a aplicação localmente:
+
+No terminal, dentro da pasta `fixa-ai-dev`, execute:
+
+``bash
+flask run
+
+O servidor será iniciado, e você poderá acessar a aplicação através do seu navegador, geralmente no endereço `http://127.0.0.1:5000/`.
+
+Interaja com o chat na página para testar as funcionalidades de analogias e sugestões de projetos.
+
+## Contribuição
+
+Contribuições são muito bem-vindas! Se você tiver ideias, encontrar bugs ou quiser adicionar novas funcionalidades, sinta-se à vontade para abrir uma issue ou enviar um Pull Request.
+
+1.  Faça um fork do projeto.
+2.  Crie uma branch para sua feature (`git checkout -b feature/sua-funcionalidade`).
+3.  Faça commit das suas alterações (`git commit -m 'Adiciona sua funcionalidade'`).
+4.  Faça push para a branch (`git push origin feature/sua-funcionalidade`).
+5.  Abra um Pull Request, descrevendo suas alterações.
+
+## Licença
+
+Este projeto está sob a Licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## Autor
+
+Desenvolvido por:
+
+- Erik Alves -
