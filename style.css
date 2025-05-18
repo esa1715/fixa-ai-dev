@@ -1,17 +1,17 @@
-/* style.css */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
     font-family: sans-serif;
     line-height: 1.6;
-    margin: 20px;
     background-color: #f4f4f4;
-    color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 40px);
-    display: flex;
-    width: 100%;
+    padding: 1% 0;
 }
 
 .text-container {
@@ -20,8 +20,16 @@ body {
     width: 50%;
 }
 
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    width: 100%;
+}
+
 h1 {
-    color: #0056b3;
+    color: #0088cd;
     text-align: center;
     margin-bottom: 10px;
 }
@@ -35,7 +43,7 @@ h1 {
 
 h2 {
     font-size: 1.2em;
-    color: #0056b3;
+    color: #0088cd;
     margin-bottom: 10px;
     border-bottom: 1px solid #eee;
     padding-bottom: 5px;
@@ -51,6 +59,7 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    background-color: #f8f5ef;
 }
 
 .user-message, .ai-message {
@@ -67,6 +76,7 @@ h2 {
     color: white;
     align-self: flex-end;
     margin-left: auto;
+    width: 100%;
 }
 
 .ai-message {
@@ -74,6 +84,22 @@ h2 {
     color: #333;
     align-self: flex-start;
     margin-right: auto;
+}
+
+.status-area {
+    display: none;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    color: #7c70f7;
+    font-style: italic;
+    text-align: center;
+    min-height: 20px;
+}
+
+.status-area p {
+    margin: 0;
+    padding: 0;
 }
 
 .message-input-area {

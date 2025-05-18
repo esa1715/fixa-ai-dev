@@ -1,7 +1,7 @@
-
 const chatHistory = document.getElementById('chatHistory');
 const userMessageInput = document.getElementById('userMessage');
 const sendButton = document.getElementById('generateButton');
+const statusArea = document.getElementById('statusArea');
 
 function addMessageToChat(message, type) {
     const messageElement = document.createElement('div');
@@ -13,6 +13,22 @@ function addMessageToChat(message, type) {
     chatHistory.scrollTop = chatHistory.scrollHeight;
 }
 
+function updateStatusArea(message) {
+    statusArea.innerHTML = `<p>${message}</p>`;
+    statusArea.style.display = 'block';
+}
+
+function clearStatusArea() {
+    statusArea.innerHTML = '';
+    statusArea.style.display = 'none';
+}
+
+function enableInput() {
+    userMessageInput.disabled = false;
+    sendButton.disabled = false;
+    userMessageInput.focus();
+}
+
 async function sendMessage() {
     const userMessage = userMessageInput.value.trim();
 
@@ -22,49 +38,57 @@ async function sendMessage() {
 
     addMessageToChat(userMessage, 'user');
 
-    userMessageInput.value = '';
+userMessageInput.value = '';
+userMessageInput.disabled = true;
+sendButton.disabled = true;
+clearStatusArea();
 
-    userMessageInput.disabled = true;
-    sendButton.disabled = true;
+try {
+    const encodedMessage = encodeURIComponent(userMessage);
+        const eventSource = new EventSource(`http://127.0.0.1:5000/stream?message=${encodedMessage}`);
 
+        eventSource.onmessage = function(event) {
+            console.log("Evento SSE recebido:", event.data);
+            const data = JSON.parse(event.data);
 
-    try {
-        const response = await fetch('http://127.0.0.1:5000/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message: userMessage })
-        });
+            if (data.type === 'progress') {
+                updateStatusArea(data.message);
 
-        if (!response.ok) {
-            let errorMsg = `Erro no backend: Status ${response.status}`;
-             try {
-                 const errorData = await response.json();
-                 if (errorData.error) {
-                     errorMsg = `Erro do Backend: ${errorData.error}`;
-                 } else if (errorData.message) {
-                      errorMsg = `Erro do Backend: ${errorData.message}`;
-                 }
-             } catch (e) {
-                 console.error("Erro ao parsear resposta de erro:", e);
-             }
-            throw new Error(errorMsg);
-        }
+            } else if (data.type === 'final') {
+                addMessageToChat(data.reply, 'ai');
+                clearStatusArea();
+                enableInput();
+                eventSource.close();
 
-        const result = await response.json();
+            } else if (data.type === 'error') {
+                addMessageToChat(`❌ Erro do Backend: ${data.message}`, 'ai');
+                clearStatusArea();
+                enableInput();
+                eventSource.close();
+            }
+        };
 
-        const botReply = result.reply || "Desculpe, não recebi uma resposta válida do bot.";
-        addMessageToChat(botReply, 'ai');
+        eventSource.onerror = function(event) {
+            console.error("Erro no EventSource:", event);
+            let errorMessage = "Erro na comunicação com o servidor.";
+
+            if (event.target && event.target.readyState === EventSource.CLOSED) {
+                errorMessage = "Conexão com o servidor foi fechada inesperadamente.";
+            } else if (event.message) {
+                 errorMessage = `Erro: ${event.message}`;
+            }
+
+            addMessageToChat(`❌ Erro: ${errorMessage}. Tente novamente.`, 'ai');
+            clearStatusArea();
+            enableInput();
+            eventSource.close();
+        };
 
     } catch (error) {
-        console.error("Erro na comunicação com o backend:", error);
-        addMessageToChat(`❌ Erro: Não foi possível conectar ao servidor ou processar a resposta. (${error.message})`, 'ai');
-
-    } finally {
-        userMessageInput.disabled = false;
-        sendButton.disabled = false;
-        userMessageInput.focus();
+        console.error("Erro ao iniciar EventSource:", error);
+        addMessageToChat(`❌ Erro fatal ao iniciar a comunicação: ${error.message}`, 'ai');
+        clearStatusArea();
+        enableInput();
     }
 }
 

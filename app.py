@@ -11,12 +11,12 @@ import textwrap
 import requests
 import warnings
 import sys
-from flask import Flask, request, jsonify
-from flask_cors import CORS # Importa CORS para permitir requisições do frontend
+import json
+from flask import Flask, request, jsonify, Response, stream_with_context
+from flask_cors import CORS
 
 warnings.filterwarnings("ignore")
 
-# --- Configuração da API Key ---
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
@@ -26,14 +26,12 @@ if not api_key:
 else:
     os.environ["GOOGLE_API_KEY"] = api_key
 
-# --- Configuração do Modelo GenAI ---
 client = Client()
-MODEL_ID = "gemini-2.0-flash" # Ou outro modelo que preferir
+MODEL_ID = "gemini-2.0-flash"
 
-# --- NOVO: Variável global para contador de sessões ---
 session_counter = 0
+ultimo_conceito = None
 
-# --- NOVA VERSÃO DA FUNÇÃO call_agent ---
 def call_agent(agent: Agent, message_text: str, user_id: str, session_id: str) -> str:
     """Chama um agente com uma mensagem de texto e retorna a resposta final."""
     session_service = InMemorySessionService()
@@ -49,7 +47,6 @@ def call_agent(agent: Agent, message_text: str, user_id: str, session_id: str) -
                     if part != event.content.parts[-1] and not part.text.endswith('\n'):
                         final_response += "\n"
     return final_response.strip()
-# --- Definição dos Agentes (Mantidos do seu código original) ---
 
 def agente_resumidor_conceito():
     """Define o Agente Resumidor de Conceito."""
@@ -72,7 +69,6 @@ def agente_resumidor_conceito():
     )
     return resumidor
 
-# Instanciar o agente resumidor uma vez globalmente
 agente_resumidor_conceito_instance = agente_resumidor_conceito()
 
 
@@ -107,13 +103,12 @@ Formato da Saída (EXATO - use os rótulos e o formato abaixo):
 CONCEITO_TECNICO: [Conceito extraído, ou "Não encontrado"]
 AREA_DE_ATUACAO: [Área extraída, ou "Não encontrada"]
 HOBBIES: [Hobbies extraídos, separados por vírgula se houver mais de um, ou "Não encontrados"]
-AREAS_PARA_ANALOGIA: [Áreas específicas para analogia extraídas, separadas por vírgula, ou "Não especificadas"]        
+AREAS_PARA_ANALOGIA: [Áreas específicas para analogia extraídas, separadas por vírgula, ou "Não especificadas"]
 """,
         tools=[],
     )
     return extrator
 
-# Instanciar o agente extrator uma vez globalmente
 agente_extrator_perfil_instance = agente_extrator_perfil()
 
 
@@ -159,11 +154,10 @@ def agente_analogista():
         ```
         """,
         description="Agente que cria analogias técnicas baseadas em resumo do conceito e informações de perfil do usuário.",
-        tools=[google_search], # Manteve Google Search pois a instrução do analogista menciona pesquisar analogias conhecidas
+        tools=[google_search]
     )
     return analogista
 
-# Instanciar o agente analogista uma vez globalmente
 agente_analogista_instance = agente_analogista()
 
 
@@ -204,111 +198,99 @@ def agente_chefe():
         ```
         """,
         description="Agente que monta a resposta final completa e polida para o usuário.",
-        tools=[], # Manteve sem ferramentas
+        tools=[],
     )
     return chefe
 
-# Instanciar o agente chefe uma vez globalmente
 agente_chefe_instance = agente_chefe()
 
-
-# --- Configuração do Flask App ---
 app = Flask(__name__)
-CORS(app) # Habilita CORS para permitir requisições do frontend rodando em outra porta/endereço
+CORS(app)
 
-# Removida a rota '/generate_analogy' que era para o formulário
-# --- NOVO: Variável global para armazenar o último conceito técnico ---
-ultimo_conceito = None
-
-@app.route('/chat', methods=['POST'])
-def chat_handler():
+@app.route('/stream', methods=['GET'])
+def stream_handler():
     global session_counter
-    global ultimo_conceito # Indica que estamos usando a variável global
+    global ultimo_conceito
+
     session_counter += 1
     session_id = f"chat_session_{session_counter}"
-    user_id = "user_unico_temporario" # Em um app real, você identificaria o usuário de alguma forma
+    user_id = "user_unico_temporario"
 
-    data = request.get_json()
+    user_raw_message = request.args.get('message')
 
-    # Verifica se a chave 'message' está presente no JSON recebido
-    if not data or 'message' not in data:
-        print("Erro: Chave 'message' não encontrada na requisição POST para /chat")
-        return jsonify({"error": "Dados incompletos fornecidos. Certifique-se de enviar um JSON com a chave 'message'."}), 400
+    if not user_raw_message:
+        error_payload = json.dumps({"type": "error", "message": "Nenhuma mensagem fornecida."})
+        return Response(f"data: {error_payload}\n\n", mimetype='text/event-stream')
 
-    user_raw_message = data['message'] # Pega a mensagem bruta do usuário
-
-    print(f"\n--- Recebido do Frontend (Chat) ---")
+    print(f"\n--- Recebido do Frontend (Stream) ---")
     print(f"  Mensagem Bruta: '{user_raw_message}'")
-    print(f"-----------------------------------")
+    print(f"  Session ID: {session_id}")
+    print(f"-------------------------------------")
 
-    # --- Pipeline de Agentes Adaptada para Mensagem Única ---
-    # O Agente 2 (Extrator de Perfil) agora precisa extrair TUDO (conceito, área, hobbies, áreas para analogia)
-    # da ÚNICA string de mensagem bruta do usuário.
+    def event_stream():
+        try:
+            agent_2_input = f"MENSAGEM BRUTA DO USUÁRIO: {user_raw_message}"
+            print(f"\n--- Chamando Agente 2 (Extrator de Perfil) ---")
 
-    try:
-        agent_2_input = f"MENSAGEM BRUTA DO USUÁRIO: {user_raw_message}"
-        print(f"\n--- Chamando Agente 2 (Extrator de Perfil) com Mensagem Bruta ---")
-        print(f"  Input:\n{textwrap.indent(agent_2_input, '  ')}")
-        profile_output_text = call_agent(agente_extrator_perfil_instance, agent_2_input, user_id=user_id, session_id=session_id)
-        print(f"  Output (Perfil Bruto):\n{textwrap.indent(profile_output_text.strip(), '  ')}")
+            progress_payload_2 = json.dumps({"type": "progress", "message": "Agente 2: Analisando sua solicitação e extraindo informações de perfil..."})
+            yield f"data: {progress_payload_2}\n\n"
 
-        # Parsear a saída do Agente 2 para obter as informações estruturadas
-        parsed_profile_info = {}
-        lines = profile_output_text.strip().splitlines()
-        for line in lines:
-            if line.startswith("CONCEITO_TECNICO:"):
-                parsed_profile_info['concept'] = line.replace("CONCEITO_TECNICO:", "", 1).strip()
-            elif line.startswith("AREA_DE_ATUACAO:"):
-                parsed_profile_info['area'] = line.replace("AREA_DE_ATUACAO:", "", 1).strip()
-            elif line.startswith("HOBBIES:"):
-                parsed_profile_info['hobbies'] = line.replace("HOBBIES:", "", 1).strip()
-            elif line.startswith("AREAS_PARA_ANALOGIA:"):
-                parsed_profile_info['analogy_areas'] = line.replace("AREAS_PARA_ANALOGIA:", "", 1).strip()
+            profile_output_text = call_agent(agente_extrator_perfil_instance, agent_2_input, user_id=user_id, session_id=session_id)
+            print(f"  Output (Perfil Bruto):\n{textwrap.indent(profile_output_text.strip(), '  ')}")
 
-        concept = parsed_profile_info.get('concept', 'Não encontrado')
+            parsed_profile_info = {}
+            lines = profile_output_text.strip().splitlines()
+            for line in lines:
+                if line.startswith("CONCEITO_TECNICO:"):
+                    parsed_profile_info['concept'] = line.replace("CONCEITO_TECNICO:", "", 1).strip()
+                elif line.startswith("AREA_DE_ATUACAO:"):
+                    parsed_profile_info['area'] = line.replace("AREA_DE_ATUACAO:", "", 1).strip()
+                elif line.startswith("HOBBIES:"):
+                    parsed_profile_info['hobbies'] = line.replace("HOBBIES:", "", 1).strip()
+                elif line.startswith("AREAS_PARA_ANALOGIA:"):
+                    parsed_profile_info['analogy_areas'] = line.replace("AREAS_PARA_ANALOGIA:", "", 1).strip()
 
-        # --- Lógica para lidar com a continuação da conversa ---
-        if concept == 'Não encontrado' and any(phrase in user_raw_message.lower() for phrase in ["outra forma", "diferente", "mais simples"]):
-            if ultimo_conceito:
-                concept = ultimo_conceito
-                print(f"\n--- Reutilizando o último conceito: '{concept}' ---")
-            else:
-                print("Erro: Nenhuma conversa anterior para referenciar.")
-                return jsonify({"reply": "Desculpe, não entendi a qual conceito você se refere. Poderia mencioná-lo novamente?"}), 200
-        elif concept != 'Não encontrado':
-            ultimo_conceito = concept # Atualiza o último conceito se um novo for encontrado
-        elif concept == 'Não encontrado':
-            print("Erro: Agente 2 não conseguiu extrair o conceito técnico da mensagem.")
-            return jsonify({"reply": "Desculpe, não consegui identificar o conceito técnico na sua mensagem. Poderia tentar reformular?"}), 200
-
-        # Garante que as outras chaves existam com defaults se não encontradas
-        parsed_area = parsed_profile_info.get('area', 'Não encontrada')
-        parsed_hobbies = parsed_profile_info.get('hobbies', 'Não encontrados')
-        parsed_analogy_areas = parsed_profile_info.get('analogy_areas', 'Não especificadas')
+            concept = parsed_profile_info.get('concept', 'Não encontrado')
 
 
-        print(f"  Perfil Parseado: Conceito='{concept}', Área='{parsed_area}', Hobbies='{parsed_hobbies}', Áreas Analogia='{parsed_analogy_areas}'")
-        print(f"-------------------------------------------------")
+            global ultimo_conceito
+            if concept == 'Não encontrado' and any(phrase in user_raw_message.lower() for phrase in ["outra forma", "diferente", "mais simples"]):
+                if ultimo_conceito:
+                    concept = ultimo_conceito
+                    print(f"\n--- Reutilizando o último conceito: '{concept}' ---")
+                else:
+                    error_payload = json.dumps({"type": "error", "message": "Desculpe, não entendi a qual conceito você se refere. Poderia mencioná-lo novamente?"})
+                    yield f"data: {error_payload}\n\n"
+                    return
+            elif concept != 'Não encontrado':
+                ultimo_conceito = concept
+            elif concept == 'Não encontrado':
+                error_payload = json.dumps({"type": "error", "message": "Desculpe, não consegui identificar o conceito técnico na sua mensagem. Poderia tentar reformular?"})
+                yield f"data: {error_payload}\n\n"
+                return
 
-    except Exception as e:
-        print(f"Erro ao chamar ou parsear Agente 2 (Extrator de Perfil): {e}")
-        return jsonify({"reply": f"Ocorreu um erro interno ao processar sua mensagem (erro ao extrair perfil). Detalhe: {e}"}), 500 # Retorna erro 500 para erro interno
+            parsed_area = parsed_profile_info.get('area', 'Não encontrada')
+            parsed_hobbies = parsed_profile_info.get('hobbies', 'Não encontrados')
+            parsed_analogy_areas = parsed_profile_info.get('analogy_areas', 'Não especificadas')
 
-    # 2. Chamar Agente 1 (Resumidor de Conceito) com o conceito extraído
-    try:
-        agent_1_input = f"CONCEITO/TEMA: {concept}"
-        print(f"\n--- Chamando Agente 1 (Resumidor de Conceito) ---")
-        print(f"  Input:\n{textwrap.indent(agent_1_input, '  ')}")
-        concept_summary_text = call_agent(agente_resumidor_conceito_instance, agent_1_input, user_id=user_id, session_id=session_id)
-        print(f"  Output (Resumo do Conceito):\n{textwrap.indent(concept_summary_text.strip(), '  ')}")
-        print(f"--------------------------------------------------")
-    except Exception as e:
-        print(f"Erro ao chamar Agente 1 (Resumidor de Conceito): {e}")
-        return jsonify({"reply": f"Ocorreu um erro interno ao resumir o conceito técnico. Detalhe: {e}"}), 500
+            print(f"  Perfil Parseado: Conceito='{concept}', Área='{parsed_area}', Hobbies='{parsed_hobbies}', Áreas Analogia='{parsed_analogy_areas}'")
+            print(f"-------------------------------------------------")
 
-    # 3. Chamar Agente 3 (Analogista) com o resumo e as informações de perfil extraídas
-    try:
-        agent_3_input = f"""
+            agent_1_input = f"CONCEITO/TEMA: {concept}"
+            print(f"\n--- Chamando Agente 1 (Resumidor de Conceito) ---")
+            progress_payload_1 = json.dumps({"type": "progress", "message": f"Agente 1: Resumindo o conceito '{concept}'..."})
+            yield f"data: {progress_payload_1}\n\n"
+
+            concept_summary_text = call_agent(agente_resumidor_conceito_instance, agent_1_input, user_id=user_id, session_id=session_id)
+            print(f"  Output (Resumo do Conceito):\n{textwrap.indent(concept_summary_text.strip(), '  ')}")
+            print(f"--------------------------------------------------")
+
+            if not concept_summary_text.strip():
+                error_payload = json.dumps({"type": "error", "message": f"Desculpe, não consegui obter informações detalhadas sobre '{concept}'."})
+                yield f"data: {error_payload}\n\n"
+                return
+
+            agent_3_input = f"""
 RESUMO DO CONCEITO: {concept_summary_text}
 
 INFORMAÇÕES DO PERFIL DO USUÁRIO:
@@ -316,50 +298,55 @@ AREA_DE_ATUACAO: {parsed_area}
 HOBBIES: {parsed_hobbies}
 AREAS_PARA_ANALOGIA: {parsed_analogy_areas}
 """
-        print(f"\n--- Chamando Agente 3 (Analogista) ---")
-        print(f"  Input:\n{textwrap.indent(agent_3_input.strip(), '  ')}")
-        analogy_text = call_agent(agente_analogista_instance, agent_3_input, user_id=user_id, session_id=session_id)
-        print(f"  Output (Analogia Bruta):\n{textwrap.indent(analogy_text.strip(), '  ')}")
-        print(f"---------------------------------------")
-    except Exception as e:
-        print(f"Erro ao chamar Agente 3 (Analogista): {e}")
-        return jsonify({"reply": f"Ocorreu um erro interno ao gerar a analogia. Detalhe: {e}"}), 500
+            print(f"\n--- Chamando Agente 3 (Analogista) ---")
+            progress_payload_3 = json.dumps({"type": "progress", "message": "Agente 3: Criando a analogia personalizada..."})
+            yield f"data: {progress_payload_3}\n\n"
 
-    # 4. Chamar Agente 4 (Chefe / Finalizador) para montar a resposta final
-    try:
-        agent_4_input = f"""
-        CONCEITO TÉCNICO: {concept}
-        RESUMO DO CONCEITO: {concept_summary_text}
-        ANALOGIA GERADA: {analogy_text}
-        INFO DO PERFIL (COMPLETA):
-        AREA_DE_ATUACAO: {parsed_area}
-        HOBBIES: {parsed_hobbies}
-        AREAS_PARA_ANALOGIA: {parsed_analogy_areas}
-        """
-        
-        print(f"\n--- Chamando Agente 4 (Chefe / Finalizador) ---")
-        print(f"  Input:\n{textwrap.indent(agent_4_input.strip(), '  ')}")
-        final_response_text = call_agent(agente_chefe_instance, agent_4_input, user_id=user_id, session_id=session_id)
-        print(f"  Output (Resposta Final):\n{textwrap.indent(final_response_text.strip(), '  ')}")
-        print(f"-----------------------------------------------")
+            analogy_text = call_agent(agente_analogista_instance, agent_3_input.strip(), user_id=user_id, session_id=session_id)
+            print(f"  Output (Analogia Bruta):\n{textwrap.indent(analogy_text.strip(), '  ')}")
+            print(f"---------------------------------------")
 
-    except Exception as e:
-        print(f"Erro ao chamar Agente 4 (Chefe / Finalizador): {e}")
-        return jsonify({"reply": f"Ocorreu um erro interno ao finalizar a resposta. Detalhe: {e}"}), 500
+            if not analogy_text.strip():
+                error_payload = json.dumps({"type": "error", "message": "Desculpe, não consegui criar uma analogia adequada com as informações fornecidas."})
+                yield f"data: {error_payload}\n\n"
+                return
+            
+            agent_4_input = f"""
+CONCEITO TÉCNICO: {concept}
+RESUMO DO CONCEITO: {concept_summary_text}
+ANALOGIA GERADA: {analogy_text}
+INFO DO PERFIL (COMPLETA):
+AREA_DE_ATUACAO: {parsed_area}
+HOBBIES: {parsed_hobbies}
+AREAS_PARA_ANALOGIA: {parsed_analogy_areas}
+"""
+            print(f"\n--- Chamando Agente 4 (Chefe / Finalizador) ---")
+            progress_payload_4 = json.dumps({"type": "progress", "message": "Agente 4: Finalizando a resposta..."})
+            yield f"data: {progress_payload_4}\n\n"
 
-    # --- Retornar a Resposta Final para o Frontend ---
-    # Retorna apenas a resposta final na chave 'reply', como esperado pelo script.js do chat
-    response_data = {
-        "reply": final_response_text,
-    }
+            final_response_text = call_agent(agente_chefe_instance, agent_4_input.strip(), user_id=user_id, session_id=session_id)
+            print(f"  Output (Resposta Final):\n{textwrap.indent(final_response_text.strip(), '  ')}")
+            print(f"-----------------------------------------------")
 
-    print("\n--- Pipeline concluída. Retornando resposta final para o frontend do chat. ---")
-    return jsonify(response_data) # Retorna 200 OK por padrão com a resposta
+            if not final_response_text.strip():
+                error_payload = json.dumps({"type": "error", "message": "Ocorreu um problema ao montar a resposta final."})
+                yield f"data: {error_payload}\n\n"
+                return
 
+            final_payload = json.dumps({"type": "final", "reply": final_response_text})
+            yield f"data: {final_payload}\n\n"
+            print("\n--- Pipeline concluída. Enviando resposta final via SSE. ---")
 
-# Adicionando um ponto de entrada simples para rodar o Flask se o script for executado diretamente
+        except Exception as e:
+            print(f"Erro geral durante o pipeline de agentes: {e}")
+            error_payload = json.dumps({"type": "error", "message": f"Ocorreu um erro interno no servidor: {e}"})
+            yield f"data: {error_payload}\n\n"
+
+    response = Response(stream_with_context(event_stream()), mimetype='text/event-stream')
+    response.headers['Cache-Control'] = 'no-cache'
+    response.headers['Connection'] = 'keep-alive'
+
+    return response
+
 if __name__ == '__main__':
-    # Use debug=True durante o desenvolvimento para ver erros detalhados
-    # Certifique-se de que o host e a porta correspondem à URL no script.js
-    app.run(debug=True, host='127.0.0.1', port=5000)
-    # Para rodar em produção, use um servidor WSGI como Gunicorn ou uWSGI
+    app.run(debug=True, host='127.0.0.1', port=5000, threaded=True)

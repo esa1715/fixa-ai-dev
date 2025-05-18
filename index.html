@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,26 +9,29 @@
     <title>FIXA AI DEV - Gerador de Analogias Tech em Chat</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <section class="text-container">
         <img src="fixai-logo.png" alt="Logo do projeto FIXA AI DEV">
-        
     </section>
+
     <section class="chat-container">
-    <h1>🤖 Gerador de Analogias Tech em Chat 🧠</h1>
-            <p>Converse com o AI para entender conceitos técnicos com analogias personalizadas.</p> <h2>Conversa:</h2>    
-    <div id="chatHistory" class="conversation-history">
+        <h1>🤖 GERADOR DE ANALOGIAS TECH EM CHAT 🤖</h1>
+        <p>Converse com o AI para entender conceitos técnicos com analogias personalizadas.</p>
+        <h2>Conversa:</h2>
 
-        <div class="ai-message">
-            <p>Olá! Qual conceito técnico você gostaria de entender hoje? Pode me dizer sua área de atuação e hobbies para eu criar uma analogia!</p>
+        <div id="chatHistory" class="conversation-history">
+            <div class="ai-message">
+                <p>Olá! Qual conceito técnico você gostaria de tentar fixar hoje? Se você me disser sua área de atuação e/ou hobbies talvez eu consiga lhe ajudar mais!</p>
+            </div>
         </div>
-    </div>
-    <div class="message-input-area">
-        <label for="userMessage" class="sr-only">Sua Mensagem:</label> <textarea id="userMessage" placeholder="Digite sua pergunta aqui..." rows="3"></textarea> <button id="generateButton">Enviar</button> </div>
-    </section>
-    </section>
-    <script src="script.js"></script>
-</body>
+        <div id="statusArea" class="status-area"></div>
 
+        
+        <div class="message-input-area">
+            <label for="userMessage" class="sr-only">Sua Mensagem:</label>
+            <textarea id="userMessage" placeholder="Digite sua pergunta aqui..." rows="3"></textarea>
+            <button id="generateButton">Enviar</button>
+        </div>
+    </section> <script src="script.js"></script>
+</body>
 </html>
