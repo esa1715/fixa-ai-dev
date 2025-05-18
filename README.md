@@ -45,6 +45,14 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 
 ### Configuração
 
+### Pré-requisitos
+
+Certifique-se de ter o **Python** e o **pip** instalados na sua máquina. Você pode verificar com os comandos:
+```bash
+python --version
+pip --version
+```
+
 1.  Clone o repositório para a sua máquina:
     ```bash
     git clone [https://www.google.com/search?q=https://github.com/esa1715/fixa-ai-dev.git](https://www.google.com/search?q=https://github.com/esa1715/fixa-ai-dev.git)
