@@ -61,8 +61,8 @@ Após seguir os passos de instalação e configuração, você pode iniciar o se
 
 No terminal, dentro da pasta `fixa-ai-dev`, execute:
 
-``bash
--flask run
+bash:
+- flask run
 
 O servidor será iniciado, e você poderá acessar a aplicação através do seu navegador, geralmente no endereço `http://127.0.0.1:5000/`.
 
