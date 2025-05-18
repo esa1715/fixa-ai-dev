@@ -35,19 +35,3 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 -   **Backend:** Python com Flask
 -   **Inteligência Artificial:** [Mencionar qual API/Modelo de IA do Google foi usado - Gemini?]
 
----
-
-**Próximos passos:**
-
-Agora precisamos preencher as seções sobre como rodar o projeto localmente (Instalação, Como Usar), quem fez, a licença, e como as pessoas podem contribuir (se aplicável).
-
-Podemos continuar? Próximas perguntas:
-
-10. Como alguém faria para **rodar o FIXA AI DEV na sua própria máquina**? Quais os passos (clonar, instalar dependências, configurar algo como API Key, executar)?
-11. Existe um arquivo **`requirements.txt`** ou similar que lista as dependências Python?
-12. O projeto utiliza alguma **Chave de API** (provavelmente do Google Gemini)? Se sim, como o usuário deve configurá-la? (Ex: arquivo `.env`, diretamente no código - desaconselhado, etc.)
-13. Você planeja permitir que outras pessoas **contribuam** com o projeto? Se sim, há alguma diretriz? (Ou podemos simplesmente dizer que contribuições são bem-vindas e explicar o processo básico: fork, branch, PR?)
-14. Quem são os **autores** do projeto? (Seu nome/usuário GitHub, e de outros colaboradores se houver).
-15. Sob qual **licença** o projeto está? (Ex: MIT, GPL, ou se ainda não pensou nisso, podemos discutir as opções. É importante ter um arquivo `LICENSE`).
-
-Vamos por essas! Suas respostas nos ajudarão a completar o esqueleto do README.
