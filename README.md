@@ -57,7 +57,7 @@ pip --version
 
 1.  Clone o repositório para a sua máquina:
     ```bash
-    git clone [https://www.google.com/search?q=https://github.com/esa1715/fixa-ai-dev.git](https://www.google.com/search?q=https://github.com/esa1715/fixa-ai-dev.git)
+    git clone https://github.com/esa1715/fixa-ai-dev.git
     ```
 
 2.  Navegue até a pasta raiz do projeto clonado:
@@ -101,4 +101,4 @@ Este projeto está sob a Licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 Desenvolvido por:
 
-- [Erik Alves - @esa1715 no GitHub](https://portfolio-pessoal-alpha-nine.vercel.app/)
+- [Erik Alves](https://portfolio-pessoal-alpha-nine.vercel.app/)
