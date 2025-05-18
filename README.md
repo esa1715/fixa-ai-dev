@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/esa1715/fixa-ai-dev/refs/heads/main/fixai-logo.png" alt="Logo do FIXA AI DEV" width="250"/> </p>
+  <img src="https://raw.githubusercontent.com/esa1715/fixa-ai-dev/refs/heads/main/fixai-logo.png" alt="Logo do FIXA AI DEV" width="500"/> </p>
 
 # FIXA AI DEV 🚀
 
@@ -92,4 +92,4 @@ Este projeto está sob a Licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 Desenvolvido por:
 
-- [Erik Alves - @esa1715 no GitHub](https://portfolio-pessoal-alpha-nine.vercel.app/)
+- [Erik Alves](https://portfolio-pessoal-alpha-nine.vercel.app/)
