@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/esa1715/fixa-ai-dev/refs/heads/main/fixai-logo.png" alt="Logo do FIXA AI DEV" width="250"/> </p>
+  <img src="https://raw.githubusercontent.com/esa1715/fixa-ai-dev/refs/heads/main/fixai-logo.png" alt="Logo do FIXA AI DEV" width="500"/> </p>
 
 # FIXA AI DEV 🚀
 
@@ -43,7 +43,7 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 
 É recomendado usar um ambiente virtual Python (como `venv` ou `conda`) para isolar as dependências do projeto.
 
-### Configuração
+### Instalação
 
 ### Pré-requisitos
 
@@ -52,6 +52,8 @@ Certifique-se de ter o **Python** e o **pip** instalados na sua máquina. Você 
 python --version
 pip --version
 ```
+
+### Configuração
 
 1.  Clone o repositório para a sua máquina:
     ```bash
