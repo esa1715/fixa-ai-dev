@@ -62,7 +62,7 @@ Após seguir os passos de instalação e configuração, você pode iniciar o se
 No terminal, dentro da pasta `fixa-ai-dev`, execute:
 
 ``bash
-flask run
+-flask run
 
 O servidor será iniciado, e você poderá acessar a aplicação através do seu navegador, geralmente no endereço `http://127.0.0.1:5000/`.
 
@@ -86,4 +86,4 @@ Este projeto está sob a Licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 Desenvolvido por:
 
-- Erik Alves -
+- [Erik Alves - @esa1715 no GitHub](https://portfolio-pessoal-alpha-nine.vercel.app/)
