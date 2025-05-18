@@ -1,0 +1,145 @@
+/* style.css */
+
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex; /* Usar flexbox para centralizar verticalmente se a tela for alta */
+    justify-content: center; /* Centralizar horizontalmente */
+    align-items: center; /* Centralizar verticalmente */
+    min-height: calc(100vh - 40px); /* Garante que o body tenha pelo menos a altura da viewport */
+}
+
+.container {
+    max-width: 700px;
+    width: 100%; /* Ocupa toda a largura disponível até o max-width */
+    margin: 20px auto; /* Margem superior/inferior e centraliza horizontalmente */
+    padding: 25px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex; /* Usa flexbox para organizar o conteúdo interno (cabeçalho, chat, input) */
+    flex-direction: column; /* Empilha os elementos filhos verticalmente */
+    height: calc(100vh - 80px); /* Faz o contêiner ocupar boa parte da altura da tela, ajustando para margens */
+    max-height: 800px; /* Define uma altura máxima para o contêiner */
+}
+
+h1 {
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 10px; /* Reduz a margem para ficar mais próximo da descrição */
+}
+
+.container > p {
+    text-align: center;
+    margin-bottom: 20px; /* Espaço entre a descrição e o início do chat */
+    color: #555;
+    font-size: 0.9em;
+}
+
+h2 { /* Título "Conversa:" */
+    font-size: 1.2em;
+    color: #0056b3;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee; /* Linha separadora */
+    padding-bottom: 5px;
+}
+
+
+/* Área onde as mensagens do chat serão exibidas */
+.conversation-history {
+    flex-grow: 1; /* Permite que esta div ocupe todo o espaço vertical restante */
+    overflow-y: auto; /* Adiciona uma barra de rolagem vertical se o conteúdo for muito longo */
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px; /* Espaço entre o histórico e a área de input */
+    display: flex; /* Usa flexbox para empilhar as mensagens */
+    flex-direction: column; /* Empilha verticalmente */
+    gap: 10px; /* Espaço entre os balões de mensagem */
+}
+
+/* Estilos para as mensagens individuais (balões de chat) */
+.user-message, .ai-message {
+    max-width: 85%; /* Limita a largura do balão para não ocupar a tela toda */
+    padding: 10px 15px;
+    border-radius: 20px; /* Cantos arredondados */
+    word-wrap: break-word; /* Quebra palavras longas para caber no balão */
+    /* white-space: pre-wrap; - Removido daqui para estilo de balão, pode ser adicionado em um span interno se precisar */
+    line-height: 1.4; /* Espaçamento entre linhas */
+    font-size: 1rem;
+}
+
+.user-message {
+    background-color: #007bff; /* Cor de fundo azul para o usuário */
+    color: white;
+    align-self: flex-end; /* Alinha o balão do usuário à direita no flexbox */
+    margin-left: auto; /* Garante que fique à direita e empurre para o lado oposto */
+}
+
+.ai-message {
+    background-color: #e9e9eb; /* Cor de fundo cinza claro para o AI */
+    color: #333;
+    align-self: flex-start; /* Alinha o balão do AI à esquerda no flexbox */
+    margin-right: auto; /* Garante que fique à esquerda e empurre para o lado oposto */
+}
+
+/* Estilos para a área de entrada da mensagem (textarea + botão) */
+.message-input-area {
+    display: flex; /* Usa flexbox para colocar textarea e botão lado a lado */
+    gap: 10px; /* Espaço entre a textarea e o botão */
+    padding-top: 15px;
+    border-top: 1px solid #eee; /* Linha separadora acima da área de input */
+    align-items: flex-end; /* Alinha itens à base (textarea e botão) */
+}
+
+.message-input-area textarea {
+    flex-grow: 1; /* Permite que a textarea ocupe o máximo de espaço disponível */
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    resize: none; /* Impede que o usuário redimensione a textarea manualmente (para não quebrar o layout flexbox) */
+    min-height: 50px; /* Altura mínima da textarea */
+    max-height: 150px; /* Altura máxima para evitar que ela cresça demais */
+}
+
+.message-input-area button {
+    flex-shrink: 0; /* Impede que o botão diminua */
+    width: auto; /* Largura automática baseada no conteúdo */
+    padding: 12px 20px; /* Padding no botão */
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+
+/* Estilo para esconder visualmente labels, mas mantê-los para leitores de tela (acessibilidade) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
