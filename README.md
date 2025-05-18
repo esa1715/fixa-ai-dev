@@ -1,7 +1,23 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/esa1715/fixa-ai-dev/refs/heads/main/fixai-logo.png" alt="Logo do FIXA AI DEV" width="150"/> </p>
+
 # FIXA AI DEV 🚀
 
 > Dificuldade para aprender um conceito Tech? 🤔 Conheça o Fixa AI DEV!
 > Em um chat interativo, a IA usa múltiplos agentes e consegue criar analogias até mesmo personalizadas para que você encontre uma conexão 🤝 com sua área e/ou seus hobbies. Além disso, ela te dá ideias de projetos 💡 para que você possa praticar e aprender de verdade. Tudo isso para tentar lhe ajudar a entender e FIXAR conceitos o mais rápido possível! 🚀
+
+## Índice
+
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Funcionalidades Principais](#funcionalidades-principais)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Instalação](#instalação)
+  - [Pré-requisitos](#pré-requisitos)
+  - [Configuração](#configuração)
+- [Como Usar](#como-usar)
+- [Contribuição](#contribuição)
+- [Licença](#licença)
+- [Autor](#autor)
 
 ## Sobre o Projeto
 
