@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/esa1715/fixa-ai-dev/refs/heads/main/fixai-logo.png" alt="Logo do FIXA AI DEV" width="500"/> </p>
+  <img src="https://raw.githubusercontent.com/esa1715/fixa-ai-dev/refs/heads/main/fixai-logo.png" alt="Logo do FIXA AI DEV" width="250"/> </p>
 
 # FIXA AI DEV 🚀
 
@@ -47,7 +47,7 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 
 1.  Clone o repositório para a sua máquina:
     ```bash
-    git clone https://github.com/esa1715/fixa-ai-dev.git
+    git clone [https://www.google.com/search?q=https://github.com/esa1715/fixa-ai-dev.git](https://www.google.com/search?q=https://github.com/esa1715/fixa-ai-dev.git)
     ```
 
 2.  Navegue até a pasta raiz do projeto clonado:
@@ -76,9 +76,8 @@ Após seguir os passos de instalação e configuração, você pode iniciar o se
 
 No terminal, dentro da pasta `fixa-ai-dev`, execute:
 
-  ```bash
-      flask run
-  ```
+bash:
+- flask run
 
 O servidor será iniciado, e você poderá acessar a aplicação através do seu navegador, geralmente no endereço `http://127.0.0.1:5000/`.
 
@@ -92,4 +91,4 @@ Este projeto está sob a Licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 Desenvolvido por:
 
-- [Erik Alves](https://portfolio-pessoal-alpha-nine.vercel.app/)
+- [Erik Alves - @esa1715 no GitHub](https://portfolio-pessoal-alpha-nine.vercel.app/)
