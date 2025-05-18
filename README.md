@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/esa1715/fixa-ai-dev/refs/heads/main/fixai-logo.png" alt="Logo do FIXA AI DEV" width="150"/> </p>
+  <img src="https://raw.githubusercontent.com/esa1715/fixa-ai-dev/refs/heads/main/fixai-logo.png" alt="Logo do FIXA AI DEV" width="250"/> </p>
 
 # FIXA AI DEV 🚀
 
@@ -15,7 +15,6 @@
   - [Pré-requisitos](#pré-requisitos)
   - [Configuração](#configuração)
 - [Como Usar](#como-usar)
-- [Contribuição](#contribuição)
 - [Licença](#licença)
 - [Autor](#autor)
 
@@ -83,16 +82,6 @@ bash:
 O servidor será iniciado, e você poderá acessar a aplicação através do seu navegador, geralmente no endereço `http://127.0.0.1:5000/`.
 
 Interaja com o chat na página para testar as funcionalidades de analogias e sugestões de projetos.
-
-## Contribuição
-
-Contribuições são muito bem-vindas! Se você tiver ideias, encontrar bugs ou quiser adicionar novas funcionalidades, sinta-se à vontade para abrir uma issue ou enviar um Pull Request.
-
-1.  Faça um fork do projeto.
-2.  Crie uma branch para sua feature (`git checkout -b feature/sua-funcionalidade`).
-3.  Faça commit das suas alterações (`git commit -m 'Adiciona sua funcionalidade'`).
-4.  Faça push para a branch (`git push origin feature/sua-funcionalidade`).
-5.  Abra um Pull Request, descrevendo suas alterações.
 
 ## Licença
 
