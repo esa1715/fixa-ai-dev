@@ -10,7 +10,7 @@
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Funcionalidades Principais](#funcionalidades-principais)
-- [Demonstração em Vídeo](#demonstração)
+- [Demonstração](#demonstração)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Instalação](#instalação)
   - [Pré-requisitos](#pré-requisitos)
@@ -36,6 +36,7 @@ O FIXA AI DEV oferece duas funcionalidades centrais para auxiliar no seu aprendi
 
 ## Demonstração
 
+![f-a-d-preview](https://github.com/user-attachments/assets/71acbbfa-9d85-45db-be43-b335866e5f03)
 https://drive.google.com/file/d/1JCIRrc83exnzQf_93R3MEF-SOjCCzqhi/view?usp=sharing
 
 ## Tecnologias Utilizadas
