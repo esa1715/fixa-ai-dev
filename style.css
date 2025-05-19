@@ -6,32 +6,36 @@
 
 body {
     font-family: sans-serif;
-    line-height: 1.6;
     background-color: #f4f4f4;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 1% 0;
+    height: 100vh;
+}
+
+main {
+    display: flex;
+    width: 90%;
 }
 
 .text-container {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 45%;
+    justify-content: space-around;
 }
 
 .chat-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100vh;
     width: 100%;
 }
 
 h1 {
-    color: #0088cd;
+    color: #05d4ff;
     text-align: center;
-    margin-bottom: 10px;
 }
 
 .container > p {
@@ -43,7 +47,7 @@ h1 {
 
 h2 {
     font-size: 1.2em;
-    color: #0088cd;
+    color: #00d4fb;
     margin-bottom: 10px;
     border-bottom: 1px solid #eee;
     padding-bottom: 5px;
@@ -55,11 +59,11 @@ h2 {
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     background-color: #f8f5ef;
+    height: 500px;
 }
 
 .user-message, .ai-message {
@@ -72,18 +76,22 @@ h2 {
 }
 
 .user-message {
-    background-color: #007bff;
+    background-color: #fff;
     color: white;
     align-self: flex-end;
     margin-left: auto;
     width: 100%;
+    color: #00cd68;
+
 }
 
 .ai-message {
-    background-color: #e9e9eb;
+    background-color: #fff;
     color: #333;
     align-self: flex-start;
     margin-right: auto;
+    
+    color: #7d70fa
 }
 
 .status-area {
@@ -107,7 +115,7 @@ h2 {
     gap: 10px;
     padding-top: 15px;
     border-top: 1px solid #eee;
-    align-items: flex-end;
+    align-items: center;
 }
 
 .message-input-area textarea {
@@ -128,7 +136,7 @@ h2 {
     padding: 12px 20px;
     font-size: 16px;
     font-weight: bold;
-    background-color: #007bff;
+    background-color: #00cd68;
     color: white;
     border: none;
     border-radius: 5px;
@@ -137,7 +145,7 @@ h2 {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #7d70fa;
 }
 
 button:disabled {

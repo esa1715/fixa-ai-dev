@@ -232,7 +232,7 @@ def stream_handler():
             agent_2_input = f"MENSAGEM BRUTA DO USUÁRIO: {user_raw_message}"
             print(f"\n--- Chamando Agente 2 (Extrator de Perfil) ---")
 
-            progress_payload_2 = json.dumps({"type": "progress", "message": "Agente 2: Analisando sua solicitação e extraindo informações de perfil..."})
+            progress_payload_2 = json.dumps({"type": "progress", "message": "Analisando sua solicitação e extraindo informações de perfil..."})
             yield f"data: {progress_payload_2}\n\n"
 
             profile_output_text = call_agent(agente_extrator_perfil_instance, agent_2_input, user_id=user_id, session_id=session_id)
@@ -278,7 +278,7 @@ def stream_handler():
 
             agent_1_input = f"CONCEITO/TEMA: {concept}"
             print(f"\n--- Chamando Agente 1 (Resumidor de Conceito) ---")
-            progress_payload_1 = json.dumps({"type": "progress", "message": f"Agente 1: Resumindo o conceito '{concept}'..."})
+            progress_payload_1 = json.dumps({"type": "progress", "message": f"Resumindo o conceito '{concept}'..."})
             yield f"data: {progress_payload_1}\n\n"
 
             concept_summary_text = call_agent(agente_resumidor_conceito_instance, agent_1_input, user_id=user_id, session_id=session_id)
@@ -299,7 +299,7 @@ HOBBIES: {parsed_hobbies}
 AREAS_PARA_ANALOGIA: {parsed_analogy_areas}
 """
             print(f"\n--- Chamando Agente 3 (Analogista) ---")
-            progress_payload_3 = json.dumps({"type": "progress", "message": "Agente 3: Criando a analogia personalizada..."})
+            progress_payload_3 = json.dumps({"type": "progress", "message": "Criando a analogia"})
             yield f"data: {progress_payload_3}\n\n"
 
             analogy_text = call_agent(agente_analogista_instance, agent_3_input.strip(), user_id=user_id, session_id=session_id)
@@ -312,16 +312,16 @@ AREAS_PARA_ANALOGIA: {parsed_analogy_areas}
                 return
             
             agent_4_input = f"""
-CONCEITO TÉCNICO: {concept}
-RESUMO DO CONCEITO: {concept_summary_text}
-ANALOGIA GERADA: {analogy_text}
-INFO DO PERFIL (COMPLETA):
-AREA_DE_ATUACAO: {parsed_area}
-HOBBIES: {parsed_hobbies}
-AREAS_PARA_ANALOGIA: {parsed_analogy_areas}
-"""
+            CONCEITO TÉCNICO: {concept}
+            RESUMO DO CONCEITO: {concept_summary_text}
+            ANALOGIA GERADA: {analogy_text}
+            INFO DO PERFIL (COMPLETA):
+            AREA_DE_ATUACAO: {parsed_area}
+            HOBBIES: {parsed_hobbies}
+            AREAS_PARA_ANALOGIA: {parsed_analogy_areas}
+            """
             print(f"\n--- Chamando Agente 4 (Chefe / Finalizador) ---")
-            progress_payload_4 = json.dumps({"type": "progress", "message": "Agente 4: Finalizando a resposta..."})
+            progress_payload_4 = json.dumps({"type": "progress", "message": "Finalizando a resposta..."})
             yield f"data: {progress_payload_4}\n\n"
 
             final_response_text = call_agent(agente_chefe_instance, agent_4_input.strip(), user_id=user_id, session_id=session_id)
