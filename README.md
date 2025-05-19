@@ -10,6 +10,7 @@
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Funcionalidades Principais](#funcionalidades-principais)
+- Demonstração em Vídeo
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Instalação](#instalação)
   - [Pré-requisitos](#pré-requisitos)
@@ -32,6 +33,10 @@ O FIXA AI DEV oferece duas funcionalidades centrais para auxiliar no seu aprendi
 
 -   **Analogias Personalizadas:** Digite qualquer conceito Tech que você esteja com dificuldade de entender. A IA irá gerar analogias relevantes, buscando conectar o conceito com a sua área de interesse ou até mesmo seus hobbies, tornando a memorização mais fácil e natural.
 -   **Ideias de Projetos Práticos:** Receba sugestões de projetos práticos relacionados ao conceito estudado. Colocar a mão na massa é uma das melhores formas de fixar o aprendizado, e o FIXA AI DEV te dá o ponto de partida.
+
+## Demonstração em Vídeo
+
+[![Demonstração do FIXA AI DEV]https://drive.google.com/file/d/1JCIRrc83exnzQf_93R3MEF-SOjCCzqhi/view?usp=sharing
 
 ## Tecnologias Utilizadas
 
