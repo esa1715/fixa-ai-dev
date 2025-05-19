@@ -10,7 +10,7 @@
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Funcionalidades Principais](#funcionalidades-principais)
-- Demonstração em Vídeo
+- [Demonstração em Vídeo](#demonstracao)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Instalação](#instalação)
   - [Pré-requisitos](#pré-requisitos)
