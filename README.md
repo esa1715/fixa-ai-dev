@@ -36,7 +36,7 @@ O FIXA AI DEV oferece duas funcionalidades centrais para auxiliar no seu aprendi
 
 ## Demonstração em Vídeo
 
-[![Demonstração do FIXA AI DEV]https://drive.google.com/file/d/1JCIRrc83exnzQf_93R3MEF-SOjCCzqhi/view?usp=sharing
+https://drive.google.com/file/d/1JCIRrc83exnzQf_93R3MEF-SOjCCzqhi/view?usp=sharing
 
 ## Tecnologias Utilizadas
 
